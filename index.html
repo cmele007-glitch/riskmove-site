@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#cdd8ea" />
+<title>RiskMove — Legal Operations & Corporate Intelligence</title>
+<meta name="description" content="Elite back-office legal operations, regulatory compliance, corporate intelligence, contract management, and freelance paralegal support for attorneys and business entities." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#d2dcec; --bg-deep:#bccbe2; --panel:#e7edf7; --panel-2:#dde5f2;
+    --ink:#0b1a33; --ink-2:#13294d; --ink-dim:#5a6c8c; --light:#eef2fa;
+    --accent:#5d78da; --line:rgba(11,26,51,.16); --line-soft:rgba(11,26,51,.08);
+    --display:"Space Grotesk", system-ui, sans-serif; --body:"Inter", system-ui, sans-serif;
+    --ease:cubic-bezier(.16,1,.3,1); --pad:clamp(20px,5vw,80px);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility }
+  body{ background:var(--bg); color:var(--ink); font-family:var(--body); line-height:1.5; overflow-x:hidden; cursor:none; }
+  @media (hover:none){ body{cursor:auto} }
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  ::selection{background:var(--ink);color:var(--light)}
+
+  /* fixed atmospheric backdrop */
+  .backdrop{position:fixed;inset:0;z-index:-2;background:linear-gradient(125deg,#c2d0e8 0%,#dbe3f1 46%,#cdd9ec 100%)}
+  .backdrop__bands{position:absolute;inset:0;opacity:.5;background:
+    linear-gradient(90deg, rgba(255,255,255,.30) 0 9%, transparent 9% 12.5%, rgba(255,255,255,.24) 12.5% 19%, transparent 19%),
+    linear-gradient(0deg, transparent 30%, rgba(255,255,255,.26) 30% 44%, transparent 44% 56%, rgba(255,255,255,.20) 56% 64%, transparent 64%)}
+
+  .cursor{position:fixed;top:0;left:0;width:10px;height:10px;border-radius:50%;background:#fff;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease),opacity .3s;mix-blend-mode:difference}
+  .cursor.grow{width:54px;height:54px}
+  @media (hover:none){ .cursor{display:none} }
+
+  .loader{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:flex-end;justify-content:space-between;padding:var(--pad)}
+  .loader__word,.loader__count{font-family:var(--display);font-weight:500;color:var(--ink);font-size:clamp(2.2rem,9vw,7rem);line-height:.92;letter-spacing:-.03em}
+  .loader__word{opacity:0;transform:translateY(40px)}
+  .loader__count{font-variant-numeric:tabular-nums}
+  .loader.done{transform:translateY(-100%);transition:transform 1.1s var(--ease)}
+
+  .wrap{max-width:1440px;margin:0 auto;padding-inline:var(--pad)}
+  section{position:relative}
+  .eyebrow{font-family:var(--body);font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dim)}
+  .dot{color:var(--accent);display:inline-block;margin-left:.06em}
+  .title{font-family:var(--display);font-weight:500;letter-spacing:-.03em;line-height:.92;font-size:clamp(2.4rem,7vw,6rem);color:var(--ink)}
+  .lead{font-size:clamp(1.05rem,1.6vw,1.5rem);line-height:1.45;color:var(--ink);max-width:46ch;font-weight:400}
+  .muted{color:var(--ink-dim)}
+  .reveal{opacity:0;transform:translateY(34px)}
+  .reveal-line{overflow:hidden;display:block}
+  .reveal-line > span{display:block;transform:translateY(110%)}
+
+  .btn{display:inline-flex;align-items:center;gap:16px;border-radius:11px;padding:17px 26px;font-family:var(--display);font-weight:500;font-size:1.02rem;transition:background .4s var(--ease),color .4s var(--ease),border-color .4s var(--ease),transform .4s var(--ease)}
+  .btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7}
+  .btn--primary{background:var(--ink);color:var(--light);border:1px solid var(--ink)}
+  .btn--primary:hover{background:var(--ink-2);transform:translateY(-2px)}
+  .btn--ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn--ghost:hover{background:var(--ink);color:var(--light);border-color:var(--ink)}
+  .arrow{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.7}
+
+  header.nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:flex-start;justify-content:space-between;padding:24px var(--pad)}
+  .nav__logo{font-family:var(--display);font-weight:500;letter-spacing:-.01em;font-size:1rem;line-height:1.12;color:var(--ink)}
+  .nav__logo sup{font-size:.5em;vertical-align:super;opacity:.7}
+  .nav__links{display:flex;gap:30px;align-items:center}
+  .nav__links a{font-size:.9rem;letter-spacing:.01em;position:relative;padding:4px 0;color:var(--ink)}
+  .nav__links a:not(.btn-mini)::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--ink);transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease)}
+  .nav__links a:not(.btn-mini):hover::after{transform:scaleX(1);transform-origin:left}
+  @media(max-width:760px){ .nav__links a:not(.btn-mini){display:none} }
+  .btn-mini{border:1px solid var(--line);border-radius:10px;padding:10px 16px !important;display:inline-flex;align-items:center;gap:8px;font-size:.85rem !important;transition:background .4s var(--ease),color .4s var(--ease),border-color .4s var(--ease)}
+  .btn-mini:hover{background:var(--ink);color:var(--light);border-color:var(--ink)}
+  .btn-mini svg{width:12px;height:12px}
+
+  .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:clamp(130px,16vh,190px);padding-bottom:clamp(55px,8vh,90px);overflow:hidden;background:transparent}
+  .hero .wrap-inner{position:relative;z-index:2;width:100%;max-width:1440px;margin:0 auto;padding-inline:var(--pad)}
+  .hero__words{margin-top:80px;font-family:var(--display);font-weight:500;letter-spacing:-.04em;line-height:.96;text-align:center;color:var(--ink)}
+  .hero__words .l{font-size:clamp(2.6rem,6.2vw,5rem);display:block}
+  .hero__words .l + .l{margin-top:.16em}
+  .hero__divider{display:flex;align-items:center;justify-content:center;margin:clamp(28px,4vh,44px) 0}
+  .hero__divider-dot{display:block;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .hero__bottom{margin-top:0;display:flex;flex-direction:column;gap:28px;align-items:center;justify-content:center;text-align:center}
+  .hero__bottom .lead{max-width:72ch;font-family:var(--display);font-weight:500;font-size:clamp(1.05rem,1.7vw,1.35rem);line-height:1.45;letter-spacing:-.01em}
+  .hero__actions{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+  @media(max-width:760px){
+    .hero{padding-top:110px}
+    .hero__words{margin-top:32px}
+  }
+
+  .block{padding-block:clamp(90px,13vh,200px)}
+  .block--tight{padding-block:clamp(70px,9vh,140px)}
+  .intro__grid{display:grid;grid-template-columns:1fr;gap:clamp(34px,5vw,80px)}
+  @media(min-width:900px){ .intro__grid{grid-template-columns:1.1fr 1fr} }
+
+  .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-block:26px;margin-top:clamp(50px,8vh,100px);overflow:hidden;white-space:nowrap}
+  .marquee__track{display:inline-flex;will-change:transform}
+  .marquee__track span{font-family:var(--display);font-weight:500;letter-spacing:-.02em;color:var(--ink);font-size:clamp(1.8rem,5vw,3.6rem);padding:0 .6em;display:inline-flex;align-items:center}
+  .marquee__track span::after{content:"•";margin-left:1.2em;color:var(--accent);font-size:.5em}
+
+  .offer__top{display:grid;grid-template-columns:1fr;gap:34px;align-items:end}
+  @media(min-width:900px){ .offer__top{grid-template-columns:1.4fr 1fr} }
+  .offer__actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:20px}
+
+  .diff__head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:clamp(40px,7vh,90px)}
+  .diff__rows{border-top:1px solid var(--line)}
+  .diff__row{border-bottom:1px solid var(--line);padding-block:clamp(30px,4.5vh,56px);display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,5vw,90px);align-items:start;transition:padding-left .5s var(--ease)}
+  @media(min-width:820px){ .diff__row{grid-template-columns:80px 1fr 1.1fr} .diff__row:hover{padding-left:18px} }
+  .diff__num{font-family:var(--display);font-size:.95rem;color:var(--accent)}
+  .diff__rowtitle{font-family:var(--display);font-weight:500;font-size:clamp(1.4rem,2.6vw,2.2rem);line-height:1.05;letter-spacing:-.02em;color:var(--ink)}
+  .diff__rowtext{color:var(--ink-dim);max-width:48ch;font-size:1.02rem}
+
+  .team__head{margin-bottom:clamp(40px,7vh,90px);max-width:68ch}
+  .team__grid{display:grid;grid-template-columns:1fr;gap:24px;align-items:stretch}
+  .process-connector{display:none}
+  @media(min-width:720px){
+    .team__grid{grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr) 56px minmax(0,1fr);gap:0}
+    .process-connector{display:flex;position:relative;align-items:center;justify-content:center;min-width:56px;z-index:0;pointer-events:none}
+    .process-connector::before{content:"";display:block;width:34px;height:1px;background:rgba(11,26,51,.42)}
+    .process-connector::after{content:"";position:absolute;right:11px;top:50%;width:8px;height:8px;border-top:1px solid var(--ink);border-right:1px solid var(--ink);transform:translateY(-50%) rotate(45deg);opacity:.76}
+  }
+  .member{border:0;border-radius:18px;padding:0;background:transparent;position:relative;z-index:1;overflow:visible;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+  .member:hover{transform:translateY(-6px)}
+  .member__photo{min-height:100%;border-radius:18px;padding:30px;margin:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;text-align:left;background:linear-gradient(155deg,#748bd0 0%,#536eb8 48%,#304b8d 100%);box-shadow:0 24px 60px -36px rgba(11,26,51,.65);color:#FFFFFF}
+  .member__number{font-family:var(--display);font-weight:600;font-size:2.4rem;line-height:1;letter-spacing:.04em;color:#FFFFFF}
+  .member__name{font-family:var(--display);font-weight:500;font-size:clamp(1.25rem,1.8vw,1.55rem);line-height:1.12;letter-spacing:-.02em;color:#FFFFFF;margin-top:28px}
+  .member__bio{color:#FFFFFF;font-size:.95rem;line-height:1.55;margin-top:16px}
+
+  .quote{padding-block:clamp(90px,15vh,220px);text-align:center}
+  .quote blockquote{font-family:var(--display);font-weight:500;letter-spacing:-.02em;line-height:1.18;color:var(--ink);font-size:clamp(1.6rem,4.2vw,3.4rem);max-width:20ch;margin:0 auto}
+  .quote cite{display:block;margin-top:38px;font-style:normal;color:var(--ink-dim);font-size:1rem;letter-spacing:.04em}
+
+  .stats__head{margin-bottom:clamp(40px,7vh,90px)}
+  .stats__grid{display:grid;grid-template-columns:1fr;border-top:1px solid var(--line)}
+  @media(min-width:760px){ .stats__grid{grid-template-columns:repeat(3,1fr)} }
+  .stat{padding-block:clamp(34px,5vh,64px);border-bottom:1px solid var(--line)}
+  @media(min-width:760px){ .stat{border-bottom:none;border-right:1px solid var(--line);padding-inline:0 30px} .stat:last-child{border-right:none} }
+  .stat__num{font-family:var(--display);font-weight:500;letter-spacing:-.03em;font-size:clamp(3.4rem,9vw,7.5rem);line-height:.9;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .stat__num .sfx{color:var(--accent)}
+  .stat__label{color:var(--ink-dim);margin-top:12px;font-size:1rem;letter-spacing:.02em}
+
+  .final{padding-block:clamp(100px,18vh,240px);text-align:center;display:flex;flex-direction:column;align-items:center;gap:34px}
+  .final .title{font-size:clamp(2.8rem,10vw,9rem)}
+  .contact-fallback{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 14px;margin-top:-8px;font-size:.92rem;color:var(--ink-dim)}
+  .contact-fallback__label{white-space:nowrap}
+  .contact-fallback__email{color:var(--ink);font-weight:500;border-bottom:1px solid rgba(11,26,51,.28);transition:border-color .3s var(--ease),opacity .3s var(--ease)}
+  .contact-fallback__email:hover{border-color:var(--ink);opacity:.68}
+  .copy-email{appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.18);color:var(--ink);border-radius:999px;padding:8px 13px;font-family:var(--body);font-size:.78rem;font-weight:500;cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease),transform .3s var(--ease)}
+  .copy-email:hover{background:var(--ink);color:var(--light);border-color:var(--ink);transform:translateY(-1px)}
+  .copy-email:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .copy-status{width:100%;min-height:1.2em;font-size:.75rem;color:var(--ink-dim)}
+  @media(max-width:560px){.contact-fallback{flex-direction:column;gap:10px}.contact-fallback__label{white-space:normal}}
+
+  footer{border-top:1px solid var(--line);padding-block:clamp(50px,8vh,90px);background:var(--bg)}
+  .foot__grid{display:grid;grid-template-columns:1fr;gap:40px}
+  @media(min-width:760px){ .foot__grid{grid-template-columns:2fr 1fr 1fr 1fr} }
+  .foot__brand .l{font-family:var(--display);font-weight:500;font-size:clamp(1.6rem,3vw,2.4rem);line-height:.95;letter-spacing:-.02em;display:block;color:var(--ink)}
+  .foot__col h4{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-dim);font-weight:500;margin-bottom:18px}
+  .foot__col a,.foot__col p{display:block;font-size:.98rem;margin-bottom:10px;color:var(--ink);transition:opacity .3s}
+  .foot__col a:hover{opacity:.55}
+  .foot__bottom{margin-top:clamp(50px,8vh,90px);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:.82rem;color:var(--ink-dim)}
+  .foot__note{margin-top:22px;max-width:70ch;font-size:.74rem;line-height:1.5;color:var(--ink-dim);opacity:.8}
+
+  .progress{position:fixed;left:0;top:0;height:2px;background:var(--accent);width:0;z-index:300}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition-duration:.01ms !important}
+    .reveal{opacity:1;transform:none}
+    .reveal-line>span{transform:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="backdrop"><div class="backdrop__bands"></div></div>
+
+<div class="cursor" id="cursor"></div>
+<div class="progress" id="progress"></div>
+
+<div class="loader" id="loader">
+  <div class="loader__word" id="loaderWord">Risk<br>Move</div>
+  <div class="loader__count" id="loaderCount">0%</div>
+</div>
+
+<header class="nav">
+  <a href="#top" class="nav__logo">Risk<br>Move<sup>TM</sup></a>
+  <nav class="nav__links">
+    <a href="#about">Capabilities</a>
+    <a href="#offer">Services</a>
+    <a href="#team">Process</a>
+    <a href="#contact" class="btn-mini">Request a Consultation
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg>
+    </a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero" id="hero">
+    <div class="wrap-inner">
+      <div class="hero__words" id="heroWords">
+        <span class="reveal-line"><span class="l">Legal Intelligence.</span></span>
+        <span class="reveal-line"><span class="l">Human Accountability.</span></span>
+      </div>
+      <div class="hero__divider reveal" aria-hidden="true"><span class="hero__divider-dot"></span></div>
+      <div class="hero__bottom">
+        <p class="lead reveal">We absorb the high-volume drafting, due diligence, and regulatory compliance workflows for law firms, corporate counsels, fintechs, and government contractors.</p>
+        <div class="hero__actions">
+          <a href="#contact" class="btn btn--primary reveal" data-cursor>Request a Consultation
+            <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+          <a href="#offer" class="btn btn--ghost reveal" data-cursor>Explore Services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap intro" id="about">
+    <p class="eyebrow reveal" style="margin-bottom:34px">Legal Operations &amp; Corporate Intelligence <span class="dot">.</span></p>
+    <div class="intro__grid">
+      <h2 class="title reveal">Complex legal work,<br>handled with precision<span class="dot">.</span></h2>
+      <div>
+        <p class="lead muted reveal">RiskMove provides scalable legal operations, regulatory compliance, corporate intelligence, contract management, and freelance paralegal support for attorneys, in-house legal teams, fintechs, real estate operators, and government contractors.</p>
+        <p class="lead muted reveal" style="margin-top:1.3em">We extend your back office without adding permanent headcount. From procedural drafting and due diligence to records review, compliance frameworks, and investigative summaries, every work product is organized for efficient attorney or corporate review.</p>
+      </div>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track" id="marquee">
+        <span>Legal Operations</span><span>Corporate Governance</span><span>Regulatory Compliance</span><span>Due Diligence</span><span>Paralegal Support</span>
+        <span>Legal Operations</span><span>Corporate Governance</span><span>Regulatory Compliance</span><span>Due Diligence</span><span>Paralegal Support</span>
+        <span>Legal Operations</span><span>Corporate Governance</span><span>Regulatory Compliance</span><span>Due Diligence</span><span>Paralegal Support</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block--tight wrap offer" id="offer">
+    <div class="offer__top">
+      <h2 class="title reveal">Where we<br>add capacity<span class="dot">.</span></h2>
+      <div>
+        <p class="lead muted reveal">Flexible project-based support across corporate governance, real estate, litigation, financial regulation, contracts, government contracting, legal research, and domestic or international corporate intelligence.</p>
+        <div class="offer__actions reveal">
+          <a href="#contact" class="btn btn--primary" data-cursor>Request a Consultation
+            <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+          <a href="#services" class="btn btn--ghost" data-cursor>View Service Areas</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block--tight wrap diff" id="services">
+    <div class="diff__head">
+      <h2 class="title reveal">Specialized<br>support<span class="dot">.</span></h2>
+      <p class="lead muted reveal" style="max-width:34ch">Four integrated service areas designed to strengthen legal, compliance, investigative, and operational workflows.</p>
+    </div>
+    <div class="diff__rows">
+      <div class="diff__row reveal"><div class="diff__num">01</div><h3 class="diff__rowtitle">Corporate Governance,<br>Real Estate &amp; Litigation Support</h3><p class="diff__rowtext">• Florida Real Estate, Title Research &amp; Landlord/Tenant Support — chain of title, deed creation, municipal audits, and eviction drafting.<br><br>• Corporate Structure Creation &amp; Minutes Maintenance — articles of incorporation, operating agreements, and board minutes.<br><br>• Procedural Litigation Motions &amp; Proposed Orders — motions to compel, dismiss, and extend time.<br><br>• Arbitration &amp; Mediation Support — exhibit organization and FINRA/AAA framework statements.</p></div>
+      <div class="diff__row reveal"><div class="diff__num">02</div><h3 class="diff__rowtitle">Fintech, Banking &amp;<br>Regulatory Compliance</h3><p class="diff__rowtext">• Fintech, Banking, OFAC &amp; FINRA Support — SEC forms, BrokerCheck histories, and compliance manuals.<br><br>• SEC &amp; FINRA “Response to Inquiry” Frameworks — preparation for SEC comment letters and FINRA deficiency notice responses.<br><br>• Subpoena Compliance &amp; Financial Investigative Summaries — forensic bank-record review, crypto ledgers, and asset tracing.</p></div>
+      <div class="diff__row reveal"><div class="diff__num">03</div><h3 class="diff__rowtitle">Corporate Spend, Contracts &amp;<br>Defense-Adjacent Support</h3><p class="diff__rowtext">• Contract Review, Analysis &amp; Budget Administration — vendor contract analysis and tracking supply-chain financial risks.<br><br>• Defense-Adjacent Compliance &amp; Gov-Con Support — SAM.gov registration, FCL clearance compilation, and FAR/DFARS flow-downs.<br><br>• Demand Letters — tailored formal correspondence for breach-of-contract, escrow, and vendor disputes.</p></div>
+      <div class="diff__row reveal"><div class="diff__num">04</div><h3 class="diff__rowtitle">Legal Research &amp;<br>Corporate Intelligence</h3><p class="diff__rowtext">• Legal Research Memos &amp; Comparative Analysis — multi-jurisdictional compliance, statutory analysis, and case-law summaries.<br><br>• International &amp; Domestic Background Due Diligence — beneficial ownership tracking, adverse-media audits, and corporate registry audits.</p></div>
+    </div>
+  </section>
+
+  <section class="block--tight wrap team" id="team">
+    <p class="eyebrow reveal" style="margin-bottom:34px">Engagement Model <span class="dot">.</span></p>
+    <div class="team__head">
+      <h2 class="title reveal">How We<br>Work<span class="dot">.</span></h2>
+      <p class="lead muted reveal" style="margin-top:26px">A disciplined, source-driven process built around careful analysis, professional judgment, and accountable delivery.</p>
+    </div>
+    <div class="team__grid">
+      <article class="member reveal" data-cursor>
+        <div class="member__photo">
+          <div class="member__number">01</div>
+          <h3 class="member__name">Define the Assignment</h3>
+          <p class="member__bio">We begin by clarifying the objective, scope, deadlines, source materials, and risk considerations so the work is focused from the start.</p>
+        </div>
+      </article>
+      <span class="process-connector process-connector--one" aria-hidden="true"></span>
+      <article class="member reveal" data-cursor>
+        <div class="member__photo">
+          <div class="member__number">02</div>
+          <h3 class="member__name">Research &amp; Develop</h3>
+          <p class="member__bio">We examine the relevant records, contracts, regulations, corporate filings, and other source materials to build an accurate and practical work product.</p>
+        </div>
+      </article>
+      <span class="process-connector process-connector--two" aria-hidden="true"></span>
+      <article class="member reveal" data-cursor>
+        <div class="member__photo">
+          <div class="member__number">03</div>
+          <h3 class="member__name">Verify &amp; Deliver</h3>
+          <p class="member__bio">Before delivery, we cross-check facts, citations, assumptions, and formatting. You receive organized, review-ready materials with clear findings and next steps.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="block--tight wrap stats">
+    <div class="stats__head"><h2 class="title reveal">Built for<br>complexity<span class="dot">.</span></h2></div>
+    <div class="stats__grid">
+      <div class="stat reveal"><div class="stat__num">4</div><p class="stat__label">Integrated legal and intelligence service areas</p></div>
+      <div class="stat reveal"><div class="stat__num"><span class="count" data-to="12">0</span></div><p class="stat__label">Specialized support capabilities across complex workflows</p></div>
+      <div class="stat reveal"><div class="stat__num"><span class="count" data-to="100">0</span><span class="sfx">%</span></div><p class="stat__label">Business-to-business professional support model</p></div>
+    </div>
+  </section>
+
+  <section class="wrap final" id="contact">
+    <h2 class="title reveal">Strengthen your<br>legal operation<span class="dot">.</span></h2>
+    <a href="mailto:cmelendez@riskmove.us?subject=RiskMove%20Consultation%20Request" class="btn btn--primary reveal" data-cursor>Request a Consultation
+      <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg>
+    </a>
+    <div class="contact-fallback reveal" aria-label="Alternative email contact">
+      <span class="contact-fallback__label">Prefer email?</span>
+      <a class="contact-fallback__email" href="mailto:cmelendez@riskmove.us?subject=RiskMove%20Consultation%20Request">cmelendez@riskmove.us</a>
+      <button class="copy-email" type="button" id="copyEmail" data-email="cmelendez@riskmove.us">Copy email address</button>
+      <span class="copy-status" id="copyStatus" role="status" aria-live="polite"></span>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="foot__grid">
+    <div class="foot__brand"><span class="l">Risk</span><span class="l">Move<span class="dot">.</span></span></div>
+    <div class="foot__col"><h4>Services</h4><a href="#about">Capabilities</a><a href="#services">Service Areas</a><a href="#team">Engagement Process</a></div>
+    <div class="foot__col"><h4>Company</h4><a href="#">About</a><a href="#contact">Consultation</a></div>
+    <div class="foot__col"><h4>Connect</h4><a href="#">LinkedIn</a><a href="mailto:cmelendez@riskmove.us">Email</a><a href="#contact">Schedule</a></div>
+  </div>
+  <div class="foot__bottom">
+    <span>© 2026 RiskMove. All rights reserved.</span>
+    <a href="mailto:cmelendez@riskmove.us">cmelendez@riskmove.us</a>
+  </div>
+  <p class="foot__note">Disclaimer: RiskMove provides professional legal operations, contract management, and paralegal support services exclusively to attorneys, corporate legal departments, and business entities. We do not provide direct public legal representation or operate as a licensed law firm.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.13/lenis.min.js"></script>
+
+<script>
+/* ===================== SITE: loader / scroll / reveals ===================== */
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasGSAP = typeof gsap !== 'undefined';
+  if (hasGSAP && typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
+
+  const cursor = document.getElementById('cursor');
+  if (matchMedia('(hover:hover)').matches && cursor){
+    let cx=innerWidth/2, cy=innerHeight/2, tx=cx, ty=cy;
+    addEventListener('mousemove', e=>{ tx=e.clientX; ty=e.clientY; });
+    (function loop(){ cx+=(tx-cx)*0.18; cy+=(ty-cy)*0.18; cursor.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%)`; requestAnimationFrame(loop); })();
+    document.querySelectorAll('a, [data-cursor], button').forEach(el=>{
+      el.addEventListener('mouseenter', ()=>cursor.classList.add('grow'));
+      el.addEventListener('mouseleave', ()=>cursor.classList.remove('grow'));
+    });
+  }
+
+  let lenis = null;
+  if (!reduce && typeof Lenis !== 'undefined'){
+    lenis = new Lenis({ lerp:0.09, smoothWheel:true });
+    if (hasGSAP){ lenis.on('scroll', ()=>{ if(window.ScrollTrigger) ScrollTrigger.update(); }); gsap.ticker.add(t=>lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0); }
+    else { (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(); }
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{ a.addEventListener('click', e=>{ const id=a.getAttribute('href'); if(id.length>1){ const t=document.querySelector(id); if(t){ e.preventDefault(); lenis.scrollTo(t); } } }); });
+  } else { document.documentElement.style.scrollBehavior = reduce ? 'auto' : 'smooth'; }
+  window.__lenis = lenis;
+
+  const prog = document.getElementById('progress');
+  function updateProgress(){ const h=document.documentElement.scrollHeight-innerHeight; prog.style.width=(h>0?(scrollY/h)*100:0)+'%'; }
+  addEventListener('scroll', updateProgress, {passive:true}); updateProgress();
+
+  const loader=document.getElementById('loader'), countEl=document.getElementById('loaderCount'), word=document.getElementById('loaderWord');
+  function startSite(){ document.body.style.overflow=''; if(lenis) lenis.start(); runHero(); runReveals(); runMarquee(); runCounters(); }
+  function revealWord(){ if(reduce||!hasGSAP){ word.style.opacity=1; word.style.transform='none'; return; } gsap.to(word,{opacity:1,y:0,duration:.9,ease:'power3.out'}); }
+
+  if(reduce){ loader.style.display='none'; startSite(); }
+  else {
+    document.body.style.overflow='hidden'; if(lenis) lenis.stop(); revealWord();
+    let n=0; const tick=setInterval(()=>{ n+=Math.max(1,Math.round((100-n)*0.08)); if(n>=100){ n=100; clearInterval(tick); finish(); } countEl.textContent=n+'%'; },28);
+    function finish(){ setTimeout(()=>{ loader.classList.add('done'); loader.addEventListener('transitionend',()=>{ loader.style.display='none'; },{once:true}); startSite(); },350); }
+  }
+
+  function runHero(){ const lines=document.querySelectorAll('#heroWords .reveal-line > span'); if(reduce||!hasGSAP){ lines.forEach(l=>l.style.transform='none'); return; }
+    gsap.to(lines,{y:'0%',duration:1.1,ease:'power4.out',stagger:.08});
+    gsap.fromTo('#hero .reveal',{opacity:0,y:24},{opacity:1,y:0,duration:1,ease:'power3.out',delay:.5,stagger:.08}); }
+  function runReveals(){ const els=document.querySelectorAll('.reveal:not(#hero .reveal)'); if(reduce||!hasGSAP||!window.ScrollTrigger){ document.querySelectorAll('.reveal').forEach(e=>{e.style.opacity=1;e.style.transform='none';}); return; }
+    els.forEach(el=>gsap.fromTo(el,{opacity:0,y:34},{opacity:1,y:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%'}})); }
+  function runMarquee(){ const track=document.getElementById('marquee'); if(!track||reduce||!hasGSAP) return; const total=track.scrollWidth/3;
+    gsap.to(track,{x:-total,duration:18,ease:'none',repeat:-1,modifiers:{x:gsap.utils.unitize(x=>parseFloat(x)%total)}}); }
+  function runCounters(){ document.querySelectorAll('.count').forEach(el=>{ const to=parseFloat(el.dataset.to); if(reduce||!hasGSAP||!window.ScrollTrigger){ el.textContent=to; return; }
+    const obj={v:0}; gsap.to(obj,{v:to,duration:1.8,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 90%',once:true},onUpdate(){ el.textContent=Math.round(obj.v); }}); }); }
+
+  addEventListener('resize', ()=>{ if(window.ScrollTrigger) ScrollTrigger.refresh(); });
+})();
+</script>
+
+
+<script>
+(function(){
+  const button = document.getElementById('copyEmail');
+  const status = document.getElementById('copyStatus');
+  if (!button || !status) return;
+
+  const showStatus = (message) => {
+    status.textContent = message;
+    window.clearTimeout(showStatus.timer);
+    showStatus.timer = window.setTimeout(() => { status.textContent = ''; }, 2800);
+  };
+
+  button.addEventListener('click', async () => {
+    const email = button.dataset.email || 'cmelendez@riskmove.us';
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(email);
+      } else {
+        const helper = document.createElement('textarea');
+        helper.value = email;
+        helper.setAttribute('readonly', '');
+        helper.style.position = 'fixed';
+        helper.style.opacity = '0';
+        document.body.appendChild(helper);
+        helper.select();
+        const copied = document.execCommand('copy');
+        helper.remove();
+        if (!copied) throw new Error('Copy unavailable');
+      }
+      const original = button.textContent;
+      button.textContent = 'Copied';
+      showStatus('Email address copied.');
+      window.setTimeout(() => { button.textContent = original; }, 1800);
+    } catch (error) {
+      showStatus('Copy unavailable. Select the email address above.');
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
